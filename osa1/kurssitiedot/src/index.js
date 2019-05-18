@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { tsPropertySignature } from '@babel/types';
 
 const Header = ({course}) => {
     return (
@@ -18,9 +17,9 @@ const Content = (props) => {
     )
 }
 
-const Part = ({part, exercises}) => {
+const Part = ({part}) => {
     return (
-        <p>{part} {exercises}</p>
+        <p>{part.name} {part.exercises}</p>
     )
 }
 
@@ -32,20 +31,24 @@ const Total = ({totalNumber}) => {
 
 const App = () => {
   const course = 'Half Stack -sovelluskehitys'
-  const part1 = 'Reactin perusteet'
-  const exercises1 = 10
-  const part2 = 'Tiedonvälitys propseilla'
-  const exercises2 = 7
-  const part3 = 'Komponenttien tila'
-  const exercises3 = 14
+  const part1 = {
+    name: 'Reactin perusteet',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Tiedonvälitys propseilla',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'Komponenttien tila',
+    exercises: 14
+  }
 
   return (
     <div>
       <Header course={course} />
-      <Content part1={part1} exercises1={exercises1}
-                part2={part2} exercises2={exercises2}
-                part3={part3} exercises3={exercises3}/>
-      <Total totalNumber={exercises1 + exercises2 + exercises3}/>
+      <Content part1={part1} part2={part2} part3={part3}/>
+      <Total totalNumber={part1.exercises + part2.exercises + part3.exercises}/>
     </div>
   )
 }
