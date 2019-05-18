@@ -10,10 +10,10 @@ const Button = ({handleClick, text}) => {
 const Statistic = ({stat, value, unit}) => {
     return (
         <tbody>
-        <tr>
-        <td>{stat}</td>
-        <td>{value} {unit}</td>
-        </tr>
+          <tr>
+            <td>{stat}</td>
+            <td>{value} {unit}</td>
+          </tr>
         </tbody>
     )
 }
