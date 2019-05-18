@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0})
+  const [best, setBest] = useState(0)
 
   const min = 0
   const max = anecdotes.length -1
@@ -13,15 +14,29 @@ const App = ({anecdotes}) => {
       const copy = { ...votes}
       copy[index] += 1
       setVotes(copy)
+      setBest(getBest)
+  }
+
+  const getBest = () => {
+    let best = 0
+    for (let i = 1; i < anecdotes.length; i++) {
+        if (votes[i] > votes[best]) best = i
+    }
+    return best
   }
 
 
   return (
     <div>
-      {anecdotes[selected]}
-      <p>has {votes[selected]} votes</p>
-      <button onClick={() => addVote(selected)}>vote</button>
-      <button onClick={() => setSelected(random)}>next anecdote</button>
+        <h2>Anecdote of the day</h2>
+          {anecdotes[selected]}
+          <p>has {votes[selected]} votes</p>
+          <button onClick={() => addVote(selected)}>vote</button>
+          <button onClick={() => setSelected(random)}>next anecdote</button>
+        <h2>Anecdote with most votes</h2>
+        {anecdotes[best]}
+          <p>has {votes[best]} votes</p>
+
     </div>
   )
 }
