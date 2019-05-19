@@ -12,9 +12,14 @@ const App = () => {
 
   const addName = (event) => {
       event.preventDefault()
-      const personObject = { name: newName }
-      setPersons(persons.concat(personObject))
-      setNewName('')
+      const personObject = { name: newName}
+      if (persons.find(person => person.name === newName)) {
+         alert(`${newName} on jo luettelossa`)
+      }
+      else {
+          setPersons(persons.concat(personObject))
+          setNewName('')
+      }
   }
 
   return (
@@ -31,7 +36,11 @@ const App = () => {
         </div>
       </form>
       <h2>Numerot</h2>
-      {persons.map(p => <p key={p.name}>{p.name}</p>)}
+      <table>
+           <tbody>      
+            {persons.map(p => <tr key={p.name}><td>{p.name}</td></tr>)}
+           </tbody>
+      </table>
     </div>
   )
 
