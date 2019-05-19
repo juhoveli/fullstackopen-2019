@@ -43,7 +43,7 @@ const Weather = ({capital}) => {
     let city = capital
     useEffect(() => {
         axios
-        .get(`http://api.apixu.com/v1/current.json?key=[removed]&q=${city}`)
+        .get(`http://api.apixu.com/v1/current.json?key=ec0c94b8bf5249e8ba0120417191905&q=${city}`)
         .then(response => {
             setWeather(response.data)
         })

@@ -2,27 +2,23 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-
-import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ newFilter, setNewFilter] = useState('')
-  const [personsToShow, setPersonsToShow] = useState(persons)
+  const [personsToShow, setPersonsToShow] = useState([])
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
-          console.log('prom full')
           setPersons(response.data)
           setPersonsToShow(response.data)
       })
 }, [])
-console.log('render', persons.length, 'notes')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -50,9 +46,14 @@ console.log('render', persons.length, 'notes')
          alert(`${newName} on jo luettelossa`)
       }
       else {
-          setPersons(persons.concat(personObject))
-          setNewName('')
-          setNewNumber('')
+          personService
+          .create(personObject)
+          .then(response => {
+            console.log(response)
+            setPersons(persons.concat(response.data))
+            setNewName('')
+            setNewNumber('')
+          })
       }
   }
 
