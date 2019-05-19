@@ -1,15 +1,36 @@
 import React, { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '050-123456' }
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Martti Tienari', number: '040-123456' },
+    { name: 'Arto Järvinen', number: '040-123456' },
+    { name: 'Lea Kutvonen', number: '040-123456' }
   ]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
+  const [ newFilter, setNewFilter] = useState('')
+  const [personsToShow, setPersonsToShow] = useState(persons)
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
+  const updateFilter = () => {
+    setPersonsToShow(persons.filter( p =>
+        p.name.toUpperCase().includes(newFilter.toUpperCase())))
+  }
+
+  const handleFilterChange = (event) => {
+      setNewFilter(event.target.value)
+      updateFilter() //TODO: tällä tulee yhden merkin myöh..
   }
 
   const addPerson = (event) => {
@@ -25,34 +46,18 @@ const App = () => {
       }
   }
 
-  const handleNumberChange = (event) => {
-      setNewNumber(event.target.value)
-  }
-
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          nimi: <input 
-                  value={newName}
-                  onChange={handleNameChange}/>
-        </div>
-        <div>
-            numero: <input
-                      value={newNumber}
-                      onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">lisää</button>
-        </div>
-      </form>
-      <h2>Numerot</h2>
-      <table>
-           <tbody>      
-            {persons.map(p => <tr key={p.name}><td>{p.name}</td><td>{p.number}</td></tr>)}
-           </tbody>
-      </table>
+      <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
+      <h2>lisää uusi</h2>
+        <PersonForm addPerson={addPerson}
+                        newName={newName}
+                        newNumber={newNumber}
+                        handleNameChange={handleNameChange}
+                        handleNumberChange={handleNumberChange}/>
+       <h2>Numerot</h2>  
+       <Persons personsToShow={personsToShow} />
     </div>
   )
 
