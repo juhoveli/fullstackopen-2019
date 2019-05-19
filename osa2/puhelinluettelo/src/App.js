@@ -3,6 +3,20 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import './index.css'
+
+
+const Notification = ({message, type}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={type}>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -10,6 +24,7 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ newFilter, setNewFilter] = useState('')
   const [personsToShow, setPersonsToShow] = useState([])
+  const [notification, setNotification] = useState('')
 
   useEffect(() => {
     personService
@@ -65,6 +80,12 @@ const App = () => {
             setPersonsToShow(persons.concat(response.data))
             setNewName('')
             setNewNumber('')
+            setNotification(
+              `Henkilö '${personObject.name}' lisätty onnistuneesti`
+            )
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
           })
       }
   }
@@ -83,6 +104,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notification} type="success"/>
       <h2>Puhelinluettelo</h2>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>lisää uusi</h2>
