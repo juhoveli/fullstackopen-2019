@@ -61,14 +61,14 @@ const App = () => {
 
   const removePerson = id => {
     const personToRemove = persons.find(p => p.id === id)
-    console.log(persons.find(p => p.id === id))
+    if (window.confirm(`Poistetaanko ${personToRemove.name}`)) {
     personService
       .remove(personToRemove.id)
       .then(response => {
-        console.log(response)
         setPersons(persons.filter(p => p.id !== id))
         setPersonsToShow(persons.filter(p => p.id !== id))
       })
+    }
   }
 
   return (
