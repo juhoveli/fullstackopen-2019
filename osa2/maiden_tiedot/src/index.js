@@ -61,6 +61,26 @@ const Weather = ({capital}) => {
 
 const Countries = ({countries}) => {
 
+    const handleClick = (event) => {
+        console.log(event.currentTarget.value)
+        let c = countries.find(co => co.name === event.currentTarget.value)
+        console.log(c)
+        let imgSize = '50px'
+        return (
+        <div>
+            <h2>{c.name}</h2>
+            <p>capital {c.capital}</p>
+            <p>population {c.population}</p>
+            <h3>languages</h3>
+            <ul>
+                {c.languages.map(l => <li key={l.iso639_2}>{l.name}</li>)}
+            </ul>
+            <img src={c.flag} alt="flag of country" height={imgSize}></img>
+            <Weather capital={c.capital}/>
+        </div>
+        )
+    }
+
     if (countries.length === 1) {
         let c = countries[0]
         let imgSize = '50px'
@@ -81,7 +101,7 @@ const Countries = ({countries}) => {
 
     if (countries.length <= 10) return (
         <div>
-            {countries.map(c => <p key={c.alpha3Code}>{c.name}<button>show</button></p>)}
+            {countries.map(c => <p key={c.alpha3Code}>{c.name}<button value={c.name} onClick={handleClick}>show</button></p>)}
         </div>
     )
 
