@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+import axios from 'axios'
+
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Martti Tienari', number: '040-123456' },
-    { name: 'Arto Järvinen', number: '040-123456' },
-    { name: 'Lea Kutvonen', number: '040-123456' }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ newFilter, setNewFilter] = useState('')
   const [personsToShow, setPersonsToShow] = useState(persons)
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+          console.log('prom full')
+          setPersons(response.data)
+          setPersonsToShow(response.data)
+      })
+}, [])
+console.log('render', persons.length, 'notes')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -23,6 +32,7 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  //todo: yksi merkki jäljessä
   const updateFilter = () => {
     setPersonsToShow(persons.filter( p =>
         p.name.toUpperCase().includes(newFilter.toUpperCase())))
@@ -30,7 +40,7 @@ const App = () => {
 
   const handleFilterChange = (event) => {
       setNewFilter(event.target.value)
-      updateFilter() //TODO: tällä tulee yhden merkin myöh..
+      updateFilter() 
   }
 
   const addPerson = (event) => {
