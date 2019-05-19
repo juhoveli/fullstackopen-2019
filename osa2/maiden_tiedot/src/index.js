@@ -24,8 +24,38 @@ const App = () => {
     return (
         <>
         <div>find countries<input onChange={handleFilterChange}/></div>
-        <Countries countries={countriesToShow}/>
+        <Countries countries={countriesToShow} />
         </>
+    )
+}
+
+const Weather = ({capital}) => {
+    const [weather, setWeather] = useState(
+        {current: {
+            temp_c: -99,
+            wind_kph: -99,
+            wind_dir: -99,
+            condition: {
+                icon: -99
+            }
+        }}
+    )
+    let city = capital
+    useEffect(() => {
+        axios
+        .get(`http://api.apixu.com/v1/current.json?key=[removed]&q=${city}`)
+        .then(response => {
+            setWeather(response.data)
+        })
+    }, [])
+
+    return (
+        <div>
+        <h3>Weather in {city}</h3>
+        <p><b>temperature: </b>{weather.current.temp_c}</p>
+        <img src={weather.current.condition.icon} alt="weather"></img>
+        <p><b>wind: </b>{weather.current.wind_kph} kph direction {weather.current.wind_dir}</p>
+        </div>
     )
 }
 
@@ -44,13 +74,14 @@ const Countries = ({countries}) => {
                 {c.languages.map(l => <li key={l.iso639_2}>{l.name}</li>)}
             </ul>
             <img src={c.flag} alt="flag of country" height={imgSize}></img>
+            <Weather capital={c.capital}/>
         </div>
         )
     }
 
     if (countries.length <= 10) return (
         <div>
-            {countries.map(c => <p key={c.alpha3Code}>{c.name}</p>)}
+            {countries.map(c => <p key={c.alpha3Code}>{c.name}<button>show</button></p>)}
         </div>
     )
 
