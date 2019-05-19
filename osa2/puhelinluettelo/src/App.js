@@ -10,7 +10,6 @@ const Notification = ({message, type}) => {
   if (message === null) {
     return null
   }
-
   return (
     <div className={type}>
       {message}
@@ -24,7 +23,7 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ newFilter, setNewFilter] = useState('')
   const [personsToShow, setPersonsToShow] = useState([])
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState({message: null, type: null})
 
   useEffect(() => {
     personService
@@ -69,6 +68,23 @@ const App = () => {
             setPersonsToShow(persons.map(p => (p.id !== person.id ? p : response.data)))
             setNewName('')
             setNewNumber('')
+            setNotification(
+              {message: `Henkilön '${personObject.name}' numero vaihdettu onnistuneesti`,
+            type: "success"}
+            )
+            setTimeout(() => {
+              setNotification({message: null, type: null})
+            }, 5000)
+          })
+          .catch(error => {
+            setNotification(
+              {message: `Henkilö '${personObject.name}' on jo poistettu`,
+              type: "failure"}
+            )
+            setTimeout(() => {
+              setNotification({message: null, type: null})
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== personObject.id))
           })
         }
       }
@@ -81,10 +97,11 @@ const App = () => {
             setNewName('')
             setNewNumber('')
             setNotification(
-              `Henkilö '${personObject.name}' lisätty onnistuneesti`
+              {message: `Henkilö '${personObject.name}' lisätty onnistuneesti`,
+            type: "success"}
             )
             setTimeout(() => {
-              setNotification(null)
+              setNotification({message: null, type: null})
             }, 5000)
           })
       }
@@ -98,13 +115,31 @@ const App = () => {
       .then(response => {
         setPersons(persons.filter(p => p.id !== id))
         setPersonsToShow(persons.filter(p => p.id !== id))
+        setNotification(
+          {message: `Henkilö '${personToRemove.name}' poistettu onnistuneesti`,
+            type: "success"}
+        )
+        setTimeout(() => {
+          setNotification({message: null, type: null})
+        }, 5000)
+      })
+      .catch(error => {
+        setNotification(
+          {message: `Henkilö '${personToRemove.name}' on jo poistettu`,
+          type: "failure"}
+        )
+        setTimeout(() => {
+          setNotification({message: null, type: null})
+        }, 5000)
+        setPersons(persons.filter(p => p.id !== id))
       })
     }
   }
 
   return (
+    
     <div>
-      <Notification message={notification} type="success"/>
+      <Notification message={notification.message} type={notification.type}/>
       <h2>Puhelinluettelo</h2>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
       <h2>lisää uusi</h2>

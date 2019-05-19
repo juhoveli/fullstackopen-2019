@@ -24,3 +24,16 @@ code {
   text-align: center;
   line-height: 2.5;
 }
+
+.failure {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: red;
+  overflow: hidden;
+  opacity: 0.75;
+  text-align: center;
+  line-height: 2.5;
+}
