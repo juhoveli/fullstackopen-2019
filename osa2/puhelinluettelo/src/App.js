@@ -39,6 +39,7 @@ const App = () => {
       updateFilter() 
   }
 
+  //todo: ei renderöidy oikein, vissiin toShow ei päivtä
   const addPerson = (event) => {
       event.preventDefault()
       const personObject = { name: newName, number: newNumber}
@@ -51,10 +52,23 @@ const App = () => {
           .then(response => {
             console.log(response)
             setPersons(persons.concat(response.data))
+            setPersonsToShow(persons.concat(response.data))
             setNewName('')
             setNewNumber('')
           })
       }
+  }
+
+  const removePerson = id => {
+    const personToRemove = persons.find(p => p.id === id)
+    console.log(persons.find(p => p.id === id))
+    personService
+      .remove(personToRemove.id)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.filter(p => p.id !== id))
+        setPersonsToShow(persons.filter(p => p.id !== id))
+      })
   }
 
   return (
@@ -68,7 +82,7 @@ const App = () => {
                         handleNameChange={handleNameChange}
                         handleNumberChange={handleNumberChange}/>
        <h2>Numerot</h2>  
-       <Persons personsToShow={personsToShow} />
+       <Persons personsToShow={personsToShow} removePerson={removePerson}/>
     </div>
   )
 
