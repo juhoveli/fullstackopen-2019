@@ -39,18 +39,28 @@ const App = () => {
       updateFilter() 
   }
 
-  //todo: ei renderöidy oikein, vissiin toShow ei päivtä
   const addPerson = (event) => {
       event.preventDefault()
       const personObject = { name: newName, number: newNumber}
       if (persons.find(person => person.name === newName)) {
-         alert(`${newName} on jo luettelossa`)
+        if (window.confirm(`${personObject.name} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+          const person = persons.find(person => person.name === newName)
+          const newPersonObject = {...person, number: newNumber}
+          
+          personService
+          .update(person.id, newPersonObject)
+          .then(response => {
+            setPersons(persons.map(p => (p.id !== person.id ? p : response.data)))
+            setPersonsToShow(persons.map(p => (p.id !== person.id ? p : response.data)))
+            setNewName('')
+            setNewNumber('')
+          })
+        }
       }
       else {
           personService
           .create(personObject)
           .then(response => {
-            console.log(response)
             setPersons(persons.concat(response.data))
             setPersonsToShow(persons.concat(response.data))
             setNewName('')
