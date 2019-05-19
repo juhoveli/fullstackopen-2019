@@ -24,7 +24,7 @@ const App = () => {
     return (
         <>
         <div>find countries<input onChange={handleFilterChange}/></div>
-        <Countries countries={countriesToShow} />
+        <Countries countries={countriesToShow} setter={setCountriesToShow} />
         </>
     )
 }
@@ -59,26 +59,14 @@ const Weather = ({capital}) => {
     )
 }
 
-const Countries = ({countries}) => {
+const Countries = ({countries, setter}) => {
 
     const handleClick = (event) => {
-        console.log(event.currentTarget.value)
         let c = countries.find(co => co.name === event.currentTarget.value)
-        console.log(c)
-        let imgSize = '50px'
-        return (
-        <div>
-            <h2>{c.name}</h2>
-            <p>capital {c.capital}</p>
-            <p>population {c.population}</p>
-            <h3>languages</h3>
-            <ul>
-                {c.languages.map(l => <li key={l.iso639_2}>{l.name}</li>)}
-            </ul>
-            <img src={c.flag} alt="flag of country" height={imgSize}></img>
-            <Weather capital={c.capital}/>
-        </div>
-        )
+        let newC = []
+        newC.push(c)
+        setter(newC)
+        console.log(newC)
     }
 
     if (countries.length === 1) {
