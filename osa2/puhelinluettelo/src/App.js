@@ -42,15 +42,10 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  //todo: yksi merkki jäljessä
-  const updateFilter = () => {
-    setPersonsToShow(persons.filter( p =>
-        p.name.toUpperCase().includes(newFilter.toUpperCase())))
-  }
-
   const handleFilterChange = (event) => {
       setNewFilter(event.target.value)
-      updateFilter() 
+      setPersonsToShow(persons.filter( p =>
+        p.name.toUpperCase().includes(event.target.value.toUpperCase())))
   }
 
   const addPerson = (event) => {
@@ -78,7 +73,7 @@ const App = () => {
           })
           .catch(error => {
             setNotification(
-              {message: `Henkilö '${personObject.name}' on jo poistettu`,
+              {message: error.response.data.error,
               type: "failure"}
             )
             setTimeout(() => {
@@ -103,6 +98,16 @@ const App = () => {
             setTimeout(() => {
               setNotification({message: null, type: null})
             }, 5000)
+          })
+          .catch(error => {
+            setNotification(
+              {message: error.response.data.error,
+              type: "failure"}
+            )
+            setTimeout(() => {
+              setNotification({message: null, type: null})
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== personObject.id))
           })
       }
   }

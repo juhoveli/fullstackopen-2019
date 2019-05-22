@@ -1,0 +1,11 @@
+{
+  "name": "osa4",
+  "version": "1.0.0",
+  "description": "fullstack osa4 blogilista",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juho Salminen",
+  "license": "ISC"
+}
