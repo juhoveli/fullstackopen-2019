@@ -56,6 +56,21 @@ test('new blog is added with right title', async () => {
       expect(contents).toContain('She')
 })
 
+test('undefined like is zero', async () => {
+    const newBlog = {
+        title: "She",
+        author: "Jane",
+        url: "google"
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+
+    const addedBlog = await Blog.findOne({title: "She"})
+    expect(addedBlog.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

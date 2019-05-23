@@ -10,8 +10,7 @@ const initialBlogs = [
     {
         title: "Me",
         author: "Jon",
-        url: "google",
-        likes: 91
+        url: "google"
     }
 ]
 
