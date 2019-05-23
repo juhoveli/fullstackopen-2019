@@ -1,31 +1,19 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-    {
-      title: "You",
-      author: "Don",
-      url: "localhost",
-      likes: 100
-    },
-    {
-        title: "Me",
-        author: "Jon",
-        url: "google",
-        likes: 91
-    }
-]
+
 
 beforeEach(async() => {
     await Blog.deleteMany({})
 
-    let blogObject = new Blog(initialBlogs[0])
+    let blogObject = new Blog(helper.initialBlogs[0])
     await blogObject.save()
 
-    blogObject = new Blog(initialBlogs[1])
+    blogObject = new Blog(helper.initialBlogs[1])
     await blogObject.save()
 })
 
@@ -37,7 +25,7 @@ test('all blogs are returned and are json', async () => {
    .expect('Content-Type', /application\/json/)
        
   const response = await api.get('/api/blogs')
-  expect(response.body.length).toBe(initialBlogs.length)
+  expect(response.body.length).toBe(helper.initialBlogs.length)
 })
 
 test('id field is called id', async () => {
@@ -45,6 +33,27 @@ test('id field is called id', async () => {
     response.body.forEach(blog => {
         expect(blog.id).toBeDefined()  
     });
+})
+
+test('new blog is added with right title', async () => {
+    const newBlog = {
+        title: "She",
+        author: "Jane",
+        url: "google",
+        likes: 33
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+
+      const contents = blogsAtEnd.map(b => b.title)
+      expect(contents).toContain('She')
 })
 
 afterAll(() => {
