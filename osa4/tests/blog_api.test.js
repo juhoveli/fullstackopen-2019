@@ -71,6 +71,25 @@ test('undefined like is zero', async () => {
     expect(addedBlog.likes).toBe(0)
 })
 
+test('deleting blog works if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd.length).toBe(
+      helper.initialBlogs.length - 1
+    )
+
+    const contents = blogsAtEnd.map(r => r.title)
+
+    expect(contents).not.toContain(blogToDelete.title)
+  })
+
 afterAll(() => {
   mongoose.connection.close()
 })
