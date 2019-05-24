@@ -67,6 +67,7 @@ describe('blogs', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .expect(200)
 
     const addedBlog = await Blog.findOne({title: "She"})
     expect(addedBlog.likes).toBe(0)
