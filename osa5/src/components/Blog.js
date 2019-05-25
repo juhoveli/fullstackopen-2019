@@ -29,9 +29,12 @@ const Blog = ({ blog, setBlogs, blogs }) => {
   }
 
   const removeBlog = async (event) => {
-    event.preventDefault()
-    await blogService.remove(blog.id)
-    setBlogs(blogs.filter(b => (b.id !== blog.id)))
+    if (window.confirm(`Remove blog ${blog.title}?`)) {
+      event.preventDefault()
+      await blogService.remove(blog.id)
+      setBlogs(blogs.filter(b => (b.id !== blog.id)))
+    }
+
   }
 
   return (
