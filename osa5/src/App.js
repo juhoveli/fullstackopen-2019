@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
+import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
 
@@ -10,6 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState({message: null, type: null})
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -40,34 +42,57 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      // TODO: toteuta virheenkäsittely
+      setNotification(
+        {message: `successful login`,
+        type: "success"}
+      )
+      setTimeout(() => {
+        setNotification({message: null, type: null})
+      }, 5000)
+    } catch (error) {
+      setPassword('')
+      setNotification(
+          {message: error.response.data.error,
+          type: "failure"}
+        )
+        setTimeout(() => {
+          setNotification({message: null, type: null})
+        }, 5000)
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
+    setNotification(
+      {message: `logged out`,
+      type: "success"}
+    )
+    setTimeout(() => {
+      setNotification({message: null, type: null})
+    }, 5000)
   }
-
-
 
   if (user === null) {
     return (
+      <>
+      <Notification message={notification.message} type={notification.type}/>
       <LoginForm 
         handleLogin={handleLogin}
         username={username} setUsername={setUsername}
         password={password} setPassword={setPassword}/>
+        </>
     )
   }
 
   return (
     <div>
+      <Notification message={notification.message} type={notification.type}/>
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <NewBlogForm 
-        blogs={blogs} setBlogs={setBlogs}
+        blogs={blogs} setBlogs={setBlogs} setNotification={setNotification}
       />
       <h2>all</h2>
       {blogs.map(blog =>

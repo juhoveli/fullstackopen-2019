@@ -14,11 +14,29 @@ const NewBlogForm = (props) => {
           url: newBlogUrl
         }
     
-        const returnedBlog = await blogService.create(blogObject)
-        props.setBlogs(props.blogs.concat(returnedBlog))
-        setNewBlogTitle('') 
-        setNewBlogAuthor('')
-        setNewBlogUrl('')
+        try {
+            const returnedBlog = await blogService.create(blogObject)
+            props.setBlogs(props.blogs.concat(returnedBlog))
+            setNewBlogTitle('') 
+            setNewBlogAuthor('')
+            setNewBlogUrl('')
+            props.setNotification(
+                {message: `${returnedBlog.title} added`,
+              type: "success"}
+              )
+              setTimeout(() => {
+                props.setNotification({message: null, type: null})
+              }, 5000)
+        } catch (exception) {
+            props.setNotification(
+                {message: "adding a blog failed",
+                type: "failure"}
+              )
+              setTimeout(() => {
+                props.setNotification({message: null, type: null})
+              }, 5000)
+        }
+
       }
 
   return (
