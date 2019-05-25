@@ -12,6 +12,7 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({message: null, type: null})
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -73,16 +74,29 @@ const App = () => {
     }, 5000)
   }
 
+
+
   if (user === null) {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
     return (
-      <>
-      <Notification message={notification.message} type={notification.type}/>
-      <LoginForm 
-        handleLogin={handleLogin}
-        username={username} setUsername={setUsername}
-        password={password} setPassword={setPassword}/>
-        </>
+      <div>
+        <Notification message={notification.message} type={notification.type}/>
+        <div style={hideWhenVisible}>
+          <h2>log in to application</h2>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm 
+            handleLogin={handleLogin}
+            username={username} setUsername={setUsername}
+            password={password} setPassword={setPassword}/>
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
     )
+    
   }
 
   return (
@@ -101,5 +115,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
