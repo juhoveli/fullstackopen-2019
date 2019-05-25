@@ -6,6 +6,7 @@ const Blog = ({ blog, setBlogs, blogs }) => {
 
   const noDetails = { display: blogShowDetails? 'none' : '' }
   const allDetails = { display: blogShowDetails ? '' : 'none' }
+  const showRemove ={display: blog.user.username === JSON.parse(window.localStorage.getItem('loggedUser')).username ? '' : 'none'}
 
   const addLike = async (event) => {
       event.preventDefault()
@@ -20,13 +21,18 @@ const Blog = ({ blog, setBlogs, blogs }) => {
       }
 
       try {
-        blogService.update(blog.id, blogObject)
+        await blogService.update(blog.id, blogObject)
         setBlogs(blogs.map(p => (p.id !== blog.id ? p : blogObject)))
       } catch (error) {
         //
       }
+  }
 
-    }
+  const removeBlog = async (event) => {
+    event.preventDefault()
+    await blogService.remove(blog.id)
+    setBlogs(blogs.filter(b => (b.id !== blog.id)))
+  }
 
   return (
   <div key={blog.id} className="blog">
@@ -37,6 +43,7 @@ const Blog = ({ blog, setBlogs, blogs }) => {
       <a href={blog.url}>{blog.url}</a>
       <p>{blog.likes} likes <button onClick={addLike}>like</button></p> 
       <p>added by {blog.user.name}</p>
+      <button style={showRemove} onClick={removeBlog}>remove</button>
     </div>
   </div>
 )
