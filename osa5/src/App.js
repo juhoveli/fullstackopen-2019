@@ -74,8 +74,6 @@ const App = () => {
     }, 5000)
   }
 
-
-
   if (user === null) {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
@@ -110,7 +108,7 @@ const App = () => {
       />
       <h2>all</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
       )}
     </div>
   )
