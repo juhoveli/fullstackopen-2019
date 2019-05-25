@@ -1,8 +1,3 @@
-// Tee testi, joka varmistaa,
-// että komponentti renderöi blogin titlen, authorin ja likejen määrän.
-
-// Lisää komponenttiin tarvittaessa testausta helpottavia CSS-luokkia.
-
 import React from 'react'
 import 'jest-dom/extend-expect'
 import { render, cleanup, fireEvent } from 'react-testing-library'

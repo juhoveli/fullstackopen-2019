@@ -38,9 +38,9 @@ const Blog = ({ blog, setBlogs, blogs }) => {
   return (
     <div key={blog.id} className="blog">
       <p onClick={() => setBlogShowDetails(!blogShowDetails)}><b>{blog.title}</b> {blog.author}</p>
-      <div style={noDetails}>
+      <div style={noDetails} className="noDetails">
       </div>
-      <div style={allDetails}>
+      <div style={allDetails} className="allDetails">
         <a href={blog.url}>{blog.url}</a>
         <p>{blog.likes} likes <button onClick={addLike}>like</button></p>
         <p>added by {blog.user.name}</p>
