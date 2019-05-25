@@ -45,3 +45,19 @@ code {
     text-align: center;
     line-height: 2.5;
   }
+
+  .blog {
+    border-style: dotted;
+    border-width: 0.1em;
+    text-align: center
+  }
+
+  a {
+    color: gold;
+  }
+
+  input {
+    margin: 1em;
+    background: black;
+    color: lightgreen;
+  }
