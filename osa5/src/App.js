@@ -107,7 +107,7 @@ const App = () => {
         blogs={blogs} setBlogs={setBlogs} setNotification={setNotification}
       />
       <h2>all</h2>
-      {blogs.map(blog =>
+      {blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
         <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
       )}
     </div>
