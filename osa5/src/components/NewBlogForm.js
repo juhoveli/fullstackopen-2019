@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import blogService from '../services/blogs'
+import propTypes from 'prop-types'
 
 const NewBlogForm = (props) => {
     const [newBlogTitle, setNewBlogTitle] = useState('')
@@ -47,7 +48,7 @@ const NewBlogForm = (props) => {
           title 
           <input
             type="text"
-            value={props.newBlogTitle}
+            value={newBlogTitle}
             name="Title"
             onChange={({target}) => setNewBlogTitle(target.value)}
           />
@@ -56,7 +57,7 @@ const NewBlogForm = (props) => {
           author
           <input
             type="text"
-            value={props.newBlogAuthor}
+            value={newBlogAuthor}
             name="Author"
             onChange={({target}) => setNewBlogAuthor(target.value)}
           />
@@ -65,7 +66,7 @@ const NewBlogForm = (props) => {
           url
           <input
             type="text"
-            value={props.newBlogUrl}
+            value={newBlogUrl}
             name="Url"
             onChange={({target}) => setNewBlogUrl(target.value)}
           />
@@ -74,6 +75,12 @@ const NewBlogForm = (props) => {
       </form>
     </>
   )
+}
+
+NewBlogForm.propTypes = {
+  blogs: propTypes.array.isRequired,
+  setBlogs: propTypes.func.isRequired,
+  setNotification: propTypes.func.isRequired
 }
 
 export default NewBlogForm
