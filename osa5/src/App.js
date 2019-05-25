@@ -79,7 +79,7 @@ const App = () => {
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     return (
-      <div>
+      <div className='notLogged'>
         <Notification message={notification.message} type={notification.type}/>
         <div style={hideWhenVisible}>
           <h2>log in to application</h2>

@@ -46,9 +46,4 @@ describe('blog shows only name and author until clicked', () => {
     expect(div).not.toHaveStyle('display: none')
   })
 
-
-
-
-
-
 })
