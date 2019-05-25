@@ -8,16 +8,16 @@ import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({message: null, type: null})
+  const [notification, setNotification] = useState({ message: null, type: null })
   const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -44,21 +44,21 @@ const App = () => {
       setUsername('')
       setPassword('')
       setNotification(
-        {message: `successful login`,
-        type: "success"}
+        { message: 'successful login',
+          type: 'success' }
       )
       setTimeout(() => {
-        setNotification({message: null, type: null})
+        setNotification({ message: null, type: null })
       }, 5000)
     } catch (error) {
       setPassword('')
       setNotification(
-          {message: error.response.data.error,
-          type: "failure"}
-        )
-        setTimeout(() => {
-          setNotification({message: null, type: null})
-        }, 5000)
+        { message: error.response.data.error,
+          type: 'failure' }
+      )
+      setTimeout(() => {
+        setNotification({ message: null, type: null })
+      }, 5000)
     }
   }
 
@@ -66,11 +66,11 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
     setNotification(
-      {message: `logged out`,
-      type: "success"}
+      { message: 'logged out',
+        type: 'success' }
     )
     setTimeout(() => {
-      setNotification({message: null, type: null})
+      setNotification({ message: null, type: null })
     }, 5000)
   }
 
@@ -86,7 +86,7 @@ const App = () => {
           <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
         <div style={showWhenVisible}>
-          <LoginForm 
+          <LoginForm
             handleLogin={handleLogin}
             username={username} setUsername={setUsername}
             password={password} setPassword={setPassword}/>
@@ -94,7 +94,6 @@ const App = () => {
         </div>
       </div>
     )
-    
   }
 
   return (
@@ -103,8 +102,10 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
-      <NewBlogForm 
-        blogs={blogs} setBlogs={setBlogs} setNotification={setNotification}
+      <NewBlogForm
+        blogs={blogs}
+        setBlogs={setBlogs}
+        setNotification={setNotification}
       />
       <h2>all</h2>
       {blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
