@@ -11,9 +11,9 @@ const NewBlogForm = (props) => {
   const addNewBlog = async (event) => {
     event.preventDefault()
     const blogObject = {
-      title: title.value,
-      author: author.value,
-      url: url.value
+      title: title.toInput.value,
+      author: author.toInput.value,
+      url: url.toInput.value
     }
 
     try {
@@ -46,15 +46,15 @@ const NewBlogForm = (props) => {
       <form onSubmit={addNewBlog}>
         <div>
           title
-          <input {...title} />
+          <input {...title.toInput} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author.toInput} />
         </div>
         <div>
           url
-          <input {...url} />
+          <input {...url.toInput} />
         </div>
         <button type="submit">create</button>
       </form>
