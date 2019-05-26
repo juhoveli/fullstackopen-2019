@@ -7,7 +7,6 @@ const NewBlogForm = (props) => {
   const title = useField('text')
   const author = useField('text')
   const url = useField('text')
-  console.log(title, author, url)
 
   const addNewBlog = async (event) => {
     event.preventDefault()
@@ -20,9 +19,9 @@ const NewBlogForm = (props) => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       props.setBlogs(props.blogs.concat(returnedBlog))
-      //setNewBlogTitle('')
-      //setNewBlogAuthor('')
-      //setNewBlogUrl('')
+      title.reset()
+      author.reset()
+      url.reset()
       props.setNotification(
         { message: `${returnedBlog.title} added`,
           type: 'success' }
