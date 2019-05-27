@@ -5,24 +5,9 @@ import { notificationChange } from '../reducers/notificationReducer'
 import Filter from '../components/Filter'
 
 const AnecdoteList = (props) => {
-
-  const anecdotes = props.anecdotes
-
-  const anecdotesFilter =
-    anecdotes
-      .filter(
-        a => a.content.includes(
-          props.filter
-        )
-      )
-
-  const anecdotesToShow = props.filter ? anecdotesFilter : anecdotes
-
   const vote = (anecdote) => {
     props.voteAnecdote(anecdote.id)
-
     props.notificationChange(anecdote.content)
-
     setTimeout(() => {
       props.notificationChange(null)
     }, 3000)
@@ -32,7 +17,7 @@ const AnecdoteList = (props) => {
     <>
       <h2>Anecdotes</h2>
       <Filter  />
-      {anecdotesToShow.sort((a, b) => a.votes > b.votes ? -1 : 1).map(anecdote =>
+      {props.visibleAnecdotes.sort((a, b) => a.votes > b.votes ? -1 : 1).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -47,11 +32,20 @@ const AnecdoteList = (props) => {
   )
 }
 
+const anecdotesToShow = (props) => {
+  const anecdotesFilter =
+  props.anecdotes
+    .filter(
+      a => a.content.toLowerCase().includes(
+        props.filter
+      )
+    )
+  return props.filter ? anecdotesFilter : props.anecdotes
+}
+
 const mapStateToProps = (state) => {
   return {
-    anecdotes: state.anecdotes,
-    filter: state.filter,
-    notification: state.notification
+    visibleAnecdotes: anecdotesToShow(state)
   }
 }
 
