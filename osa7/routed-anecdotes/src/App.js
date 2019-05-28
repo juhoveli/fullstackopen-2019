@@ -9,14 +9,11 @@ const Menu = () => {
     paddingRight: 5
   }
   return (
-    
     <div>
-      
           <Link style={padding} to='/'>anecdotes</Link>
           <Link style={padding} to='/create'>create new</Link>
           <Link style={padding} to='/about'>about</Link>
     </div>
-  
   )
 }
 
@@ -24,10 +21,24 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+      <li key={anecdote.id}>
+        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+      </li>
+      )}
     </ul>
   </div>
 )
+
+const Anecdote = ({anecdote}) => {
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -139,7 +150,11 @@ const App = () => {
           <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes}/>} />
           <Route path="/create" render={()=> <CreateNew addNew={addNew}/>} />
           <Route path="/about" render={() => <About />} />
-  
+          <Route exact path="/anecdotes/:id" render={({ match }) =>
+            <Anecdote
+              anecdote={anecdoteById(match.params.id)}
+            />
+          } />
       </div>
       <Footer />
       </Router>
