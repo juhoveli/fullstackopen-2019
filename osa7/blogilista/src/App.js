@@ -126,15 +126,31 @@ const App = () => {
     )
   }
 
+  const nav = {
+    flex: 1,
+    backgroundColor: 'yellowgreen',
+    color: 'black',
+    padding: 10
+  }
+
+  const navLink = {
+    padding: 10,
+    color: 'black'
+  }
 
 
   return (
     <div className='loggedIn'>
       <Notification notification={store.getState().notification} />
       <Router>
+        <div style={nav}>
+          <Link style={navLink} to="/">blogs</Link>
+          <Link style={navLink} to="/users">users</Link>
+          <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
+        </div>
         <h2>blogs</h2>
         <p>{user.name} logged in</p>
-        <button onClick={handleLogout}>logout</button>
         <Route exact path="/" render={() =>
           <div>
             <NewBlogForm blogs={store.getState().blog}/>
