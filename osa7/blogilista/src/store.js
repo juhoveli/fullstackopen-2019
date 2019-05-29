@@ -1,28 +1,19 @@
 import { createStore, combineReducers } from 'redux'
-
-const notificationReducer = (state = {
-  type: 'NONE',
-  data: {
-    type: 'success',
-    message: 'NOTIFIKAATIO',
-  }
-}, action) => {
-  switch (action.type) {
-  case 'SUCCESS':
-    return action
-  case 'ERROR':
-    return action
-  case 'NONE':
-    return action
-  default:
-    return state
-  }
-}
+import notificationReducer from './reducers/notificationReducer'
+import blogReducer from './reducers/blogReducer'
+import blogService from './services/blogs'
 
 const reducer = combineReducers({
-  notification: notificationReducer
+  notification: notificationReducer,
+  blog: blogReducer
 })
 
 const store = createStore(reducer)
+
+blogService.getAll().then(blogs =>
+  blogs.forEach(blog => {
+    store.dispatch({ type: 'NEW', data: blog })
+  })
+)
 
 export default store

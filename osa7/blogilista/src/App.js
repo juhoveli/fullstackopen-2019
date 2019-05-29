@@ -10,17 +10,10 @@ import blogService from './services/blogs'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -114,12 +107,11 @@ const App = () => {
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <NewBlogForm
-        blogs={blogs}
-        setBlogs={setBlogs}
+        blogs={store.getState().blog}
       />
       <h2>all</h2>
-      {blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
-        <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
+      {store.getState().blog.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
+        <Blog key={blog.id} blog={blog} blogs={store.getState().blog}/>
       )}
     </div>
   )

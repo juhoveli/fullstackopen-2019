@@ -19,7 +19,10 @@ const NewBlogForm = (props) => {
 
     try {
       const returnedBlog = await blogService.create(blogObject)
-      props.setBlogs(props.blogs.concat(returnedBlog))
+      store.dispatch({
+        type: 'NEW',
+        data: returnedBlog
+      })
       title.reset()
       author.reset()
       url.reset()
