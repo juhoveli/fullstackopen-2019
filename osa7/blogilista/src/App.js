@@ -5,15 +5,27 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import userService from './services/users'
 import loginService from './services/login'
 import blogService from './services/blogs'
+import {
+  BrowserRouter as Router,
+  Route, Link, Redirect, withRouter
+} from 'react-router-dom'
 
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
   const [loginVisible, setLoginVisible] = useState(false)
+
+  useEffect(() => {
+    userService.getAll().then(users =>
+      setUsers( users )
+    )
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -103,16 +115,36 @@ const App = () => {
   return (
     <div className='loggedIn'>
       <Notification notification={store.getState().notification} />
-      <h2>blogs</h2>
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
-      <NewBlogForm
-        blogs={store.getState().blog}
-      />
-      <h2>all</h2>
-      {store.getState().blog.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
-        <Blog key={blog.id} blog={blog} blogs={store.getState().blog}/>
-      )}
+      <Router>
+        <h2>blogs</h2>
+        <p>{user.name} logged in</p>
+        <button onClick={handleLogout}>logout</button>
+        <Route exact path="/" render={() =>
+          <div>
+            <NewBlogForm blogs={store.getState().blog}/>
+            <h2>all</h2>
+            {store.getState().blog.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
+              <Blog key={blog.id} blog={blog} blogs={store.getState().blog}/>
+            )}
+          </div>
+        } />
+        <Route exact path="/users" render={() =>
+          <div>
+            <h2>Users</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <th></th>
+                  <th>blogs created</th>
+                </tr>
+                {users.map(u => <tr key={u.id}><td>{u.name}</td> <td>{u.blogs.length}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        } />
+
+
+      </Router>
     </div>
   )
 }
