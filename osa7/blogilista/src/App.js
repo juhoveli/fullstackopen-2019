@@ -5,6 +5,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import User from './components/User'
 import userService from './services/users'
 import loginService from './services/login'
 import blogService from './services/blogs'
@@ -112,6 +113,15 @@ const App = () => {
     )
   }
 
+  const userById = (id) => {
+    console.log(typeof id)
+    console.log(users)
+    return (
+      users.find(u => u.id === id)
+    )
+  }
+
+
   return (
     <div className='loggedIn'>
       <Notification notification={store.getState().notification} />
@@ -137,13 +147,16 @@ const App = () => {
                   <th></th>
                   <th>blogs created</th>
                 </tr>
-                {users.map(u => <tr key={u.id}><td>{u.name}</td> <td>{u.blogs.length}</td></tr>)}
+                {users.map(u => <tr key={u.id}><td><Link to={`/users/${u.id}`}>{u.name}</Link></td> <td>{u.blogs.length}</td></tr>)}
               </tbody>
             </table>
           </div>
         } />
-
-
+        <Route exact path="/users/:id" render={({ match }) =>
+          <User
+            user={userById(match.params.id)}
+          />
+        } />
       </Router>
     </div>
   )

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const Notification = ({ notification }) => {
-  console.log(notification)
   if (notification.type === 'NONE') return null
 
   return (
