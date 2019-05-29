@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import {
+  BrowserRouter as Router,
+  Route, Link
+} from 'react-router-dom'
 
 const Blog = ({ blog, setBlogs, blogs }) => {
   const [blogShowDetails, setBlogShowDetails] = useState(false)
@@ -37,7 +41,7 @@ const Blog = ({ blog, setBlogs, blogs }) => {
 
   return (
     <div key={blog.id} className="blog">
-      <p onClick={() => setBlogShowDetails(!blogShowDetails)}><b>{blog.title}</b> {blog.author}</p>
+      <p onClick={() => setBlogShowDetails(!blogShowDetails)}><b><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></b> {blog.author}</p>
       <div style={noDetails} className="noDetails">
       </div>
       <div style={allDetails} className="allDetails">

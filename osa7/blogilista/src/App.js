@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import User from './components/User'
+import SingleBlog from './components/SingleBlog'
 import userService from './services/users'
 import loginService from './services/login'
 import blogService from './services/blogs'
@@ -114,12 +115,17 @@ const App = () => {
   }
 
   const userById = (id) => {
-    console.log(typeof id)
-    console.log(users)
     return (
       users.find(u => u.id === id)
     )
   }
+
+  const blogById = (id) => {
+    return (
+      store.getState().blog.find(u => u.id === id)
+    )
+  }
+
 
 
   return (
@@ -155,6 +161,11 @@ const App = () => {
         <Route exact path="/users/:id" render={({ match }) =>
           <User
             user={userById(match.params.id)}
+          />
+        } />
+        <Route exact path="/blogs/:id" render={({ match }) =>
+          <SingleBlog
+            blog={blogById(match.params.id)}
           />
         } />
       </Router>
