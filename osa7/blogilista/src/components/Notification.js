@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Notification = ({ message, type }) => {
-  if (!message) return null
+const Notification = ({ notification }) => {
+  console.log(notification)
+  if (notification.type === 'NONE') return null
 
   return (
-    <div className={type}>
-      {message}
+    <div className={notification.data.type}>
+      {notification.data.message}
     </div>
   )
 }

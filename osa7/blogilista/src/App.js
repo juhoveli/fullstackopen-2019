@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import store from './store'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
@@ -6,12 +8,12 @@ import Notification from './components/Notification'
 import loginService from './services/login'
 import blogService from './services/blogs'
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({ message: null, type: null })
   const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
@@ -43,35 +45,44 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setNotification(
-        { message: 'successful login',
-          type: 'success' }
-      )
-      setTimeout(() => {
-        setNotification({ message: null, type: null })
-      }, 5000)
+      store.dispatch({
+        type: 'SUCCESS',
+        data: {
+          type: 'success',
+          message: 'successful login',
+        }
+      })
+      setTimeout(() => store.dispatch({
+        type: 'NONE',
+      }), 5000)
     } catch (error) {
       setPassword('')
-      setNotification(
-        { message: error.response.data.error,
-          type: 'failure' }
-      )
-      setTimeout(() => {
-        setNotification({ message: null, type: null })
-      }, 5000)
+      store.dispatch({
+        type: 'ERROR',
+        data: {
+          type: 'failure',
+          message: error.response.data.error,
+        }
+      })
+      setTimeout(() => store.dispatch({
+        type: 'NONE',
+      }), 5000)
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
-    setNotification(
-      { message: 'logged out',
-        type: 'success' }
-    )
-    setTimeout(() => {
-      setNotification({ message: null, type: null })
-    }, 5000)
+    store.dispatch({
+      type: 'SUCCESS',
+      data: {
+        type: 'success',
+        message: 'logged out!',
+      }
+    })
+    setTimeout(() => store.dispatch({
+      type: 'NONE'
+    }), 5000)
   }
 
   if (user === null) {
@@ -80,7 +91,7 @@ const App = () => {
 
     return (
       <div className='notLogged'>
-        <Notification message={notification.message} type={notification.type}/>
+        <Notification notification={store.getState().notification} />
         <div style={hideWhenVisible}>
           <h2>log in to application</h2>
           <button onClick={() => setLoginVisible(true)}>log in</button>
@@ -98,14 +109,13 @@ const App = () => {
 
   return (
     <div className='loggedIn'>
-      <Notification message={notification.message} type={notification.type}/>
+      <Notification notification={store.getState().notification} />
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <NewBlogForm
         blogs={blogs}
         setBlogs={setBlogs}
-        setNotification={setNotification}
       />
       <h2>all</h2>
       {blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1).map(blog =>
@@ -114,6 +124,13 @@ const App = () => {
     </div>
   )
 }
+
+const renderApp = () => {
+  ReactDOM.render(<App />, document.getElementById('root'))
+}
+
+renderApp()
+store.subscribe(renderApp)
 
 
 export default App

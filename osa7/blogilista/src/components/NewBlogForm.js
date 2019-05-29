@@ -2,6 +2,7 @@ import React from 'react'
 import { useField } from '../hooks/index'
 import blogService from '../services/blogs'
 import propTypes from 'prop-types'
+import store from '../store'
 
 const NewBlogForm = (props) => {
   const title = useField('text')
@@ -22,21 +23,27 @@ const NewBlogForm = (props) => {
       title.reset()
       author.reset()
       url.reset()
-      props.setNotification(
-        { message: `${returnedBlog.title} added`,
-          type: 'success' }
-      )
-      setTimeout(() => {
-        props.setNotification({ message: null, type: null })
-      }, 5000)
+      store.dispatch({
+        type: 'SUCCESS',
+        data: {
+          type: 'success',
+          message: `${returnedBlog.title} added`,
+        }
+      })
+      setTimeout(() => store.dispatch({
+        type: 'NONE'
+      }), 5000)
     } catch (exception) {
-      props.setNotification(
-        { message: 'adding a blog failed',
-          type: 'failure' }
-      )
-      setTimeout(() => {
-        props.setNotification({ message: null, type: null })
-      }, 5000)
+      store.dispatch({
+        type: 'ERROR',
+        data: {
+          type: 'failure',
+          message: exception.response.data.error,
+        }
+      })
+      setTimeout(() => store.dispatch({
+        type: 'NONE',
+      }), 5000)
     }
   }
 
@@ -65,7 +72,6 @@ const NewBlogForm = (props) => {
 NewBlogForm.propTypes = {
   blogs: propTypes.array.isRequired,
   setBlogs: propTypes.func.isRequired,
-  setNotification: propTypes.func.isRequired
 }
 
 export default NewBlogForm
